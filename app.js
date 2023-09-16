@@ -83,25 +83,26 @@ app.post("/admin/find", (req, res) => {
     if (req.session.isAuthorised) {
         if (req.body.rollno == "") {
             res.redirect("/home");
-        }
-        console.log(req.body);
-        var Roll = parseInt(req.body.rollno);
-        console.log(Roll);
-        student.find({ _id: Roll })
-            .then(details => {
-                if (details.length == 0) {
-                    res.redirect("/home");
-                }
-                console.log(details);
-                res.render("info.ejs", {
-                    sdetails: details,
-                    name: details[0].Name,
+        } else {
+            console.log(req.body);
+            var Roll = parseInt(req.body.rollno);
+            console.log(Roll);
+            student.find({ _id: Roll })
+                .then(details => {
+                    if (details.length == 0) {
+                        res.redirect("/home");
+                    }
+                    console.log(details);
+                    res.render("info.ejs", {
+                        sdetails: details,
+                        name: details[0].Name,
+                    })
                 })
-            })
-            .catch(err => {
-                //console.log(err);
-                res.render("homepage.ejs");
-            })
+                .catch(err => {
+                    //console.log(err);
+                    res.render("homepage.ejs");
+                })
+        }
     } else {
         res.redirect("/");
     }
