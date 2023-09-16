@@ -61,7 +61,7 @@ app.get("/", (req, res) => {
 //var isAuthorised = false;
 app.post("/admin", (req, res) => {
     console.log(req.body);
-    if (req.body.userid == userid && req.body.password == password) {
+    if (req.body.userid.trim() == userid && req.body.password.trim() == password) {
         req.session.isAuthorised = true;
         res.redirect("/home");
     } else {
@@ -81,7 +81,6 @@ app.get("/home", (req, res) => {
 //handling find requests according to the entered rollno
 app.post("/admin/find", (req, res) => {
     if (req.session.isAuthorised) {
-
         if (req.body.rollno == "") {
             res.redirect("/home");
         }
@@ -160,7 +159,7 @@ app.post("/admin/findName/name", (req, res) => {
             res.redirect("/admin/findName")
         }
         console.log(req.body);
-        var name = (req.body.name).toUpperCase();
+        var name = (req.body.name).toUpperCase().trim();
         console.log(name);
         student.find({ Name: name })
             .then(details => {
@@ -186,7 +185,7 @@ app.post("/admin/findName/fName", (req, res) => {
             res.redirect("/admin/findName")
         }
         console.log(req.body);
-        var name = (req.body.name).toUpperCase();
+        var name = (req.body.name).toUpperCase().trim();
         console.log(name);
         student.find({ FirstName: name })
             .then(details => {
@@ -229,11 +228,11 @@ app.post("/uploadInfo", (req, res) => {
                 if (detail.length === 0) {
                     var newuser = new student({
                         _id: parseInt(req.body.rollNo),
-                        Name: (req.body.fname + " " + req.body.lname).toUpperCase(),
+                        Name: (req.body.fname.trim() + " " + req.body.lname.trim()).toUpperCase(),
                         Branch: req.body.branch,
-                        FatherName: (req.body.fathername).toUpperCase(),
-                        FirstName: (req.body.fname).toUpperCase(),
-                        LastName: (req.body.lname).toUpperCase()
+                        FatherName: (req.body.fathername).toUpperCase().trim(),
+                        FirstName: (req.body.fname).toUpperCase().trim(),
+                        LastName: (req.body.lname).toUpperCase().trim()
                     });
                     newuser.save();
                     console.log("New user Added");
